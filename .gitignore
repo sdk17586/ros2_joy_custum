@@ -1,0 +1,45 @@
+# ROS2 build artifacts
+build/
+install/
+log/
+
+# Compiled files
+*.o
+*.so
+*.a
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Build system
+compile_commands.json
+*.cmake
+CMakeCache.txt
+CMakeFiles/
+
+# C++ compiled files
+*.exe
+*.out
+*.app
+
+# Temporary files
+*.tmp
+*.bak
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
