@@ -23,6 +23,17 @@ else
     echo "ℹ️  $BUILD_DIR 디렉토리가 없습니다. (이미 정리됨)"
 fi
 
+# build 디렉토리 삭제
+CACHE_DIR=".cache"
+
+if [ -d "$CACHE_DIR" ]; then
+    echo "📦 $CACHE_DIR 디렉토리를 삭제합니다..."
+    rm -rf "$CACHE_DIR"
+    echo "✅ $CACHE_DIR 디렉토리가 삭제되었습니다."
+else
+    echo "ℹ️  $CACHE_DIR 디렉토리가 없습니다. (이미 정리됨)"
+fi
+
 # log 디렉토리 삭제
 LOG_DIR="log"
 
