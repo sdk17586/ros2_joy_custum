@@ -5,32 +5,33 @@
 namespace custum_joy_teleop {
 
 JoyTeleopNode::JoyTeleopNode() : Node("joy_teleop_node") {
-  // Declare parameters
-  this->declare_parameter<int>("linear_axis", 1); // Default: left stick Y-axis
-  this->declare_parameter<int>("angular_axis",
-                               3); // Default: axes[3] (4th value)
+  initializeParameters();
+  initializeSubscribers();
+  initializePublishers();
+  prev_x_button_state_ = false;
+}
+
+void JoyTeleopNode::initializeParameters() {
+  this->declare_parameter<int>("linear_axis", 1);
+  this->declare_parameter<int>("angular_axis", 3);
   this->declare_parameter<double>("linear_scale", 1.0);
   this->declare_parameter<double>("angular_scale", 1.0);
 
-  // Get parameters
   linear_axis_ = this->get_parameter("linear_axis").as_int();
   angular_axis_ = this->get_parameter("angular_axis").as_int();
   linear_scale_ = this->get_parameter("linear_scale").as_double();
   angular_scale_ = this->get_parameter("angular_scale").as_double();
+}
 
-  // Create subscriber for /joy topic
+void JoyTeleopNode::initializeSubscribers() {
   joy_sub_ = this->create_subscription<sensor_msgs::msg::Joy>(
       "/joy", 10,
       std::bind(&JoyTeleopNode::joyCallback, this, std::placeholders::_1));
+}
 
-  // Create publisher for /cmd_vel topic
-  cmd_vel_pub_ =
-      this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
-
-  // Create publisher for string messages
-  string_pub_ = this->create_publisher<std_msgs::msg::String>("/x_button", 10);
-
-  prev_x_button_state_ = false;
+void JoyTeleopNode::initializePublishers() {
+  cmd_vel_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
+  button_pub_ = this->create_publisher<std_msgs::msg::String>("/x_button", 10);
 }
 
 void JoyTeleopNode::joyCallback(const sensor_msgs::msg::Joy::SharedPtr msg) {
@@ -81,7 +82,7 @@ void JoyTeleopNode::handleXButton(bool pressed) {
   if (pressed && !prev_x_button_state_) {
     auto string_msg = std_msgs::msg::String();
     string_msg.data = "x_push";
-    string_pub_->publish(string_msg);
+    button_pub_->publish(string_msg);
     RCLCPP_INFO(this->get_logger(), "X button pressed: published 'x_push'");
   }
 

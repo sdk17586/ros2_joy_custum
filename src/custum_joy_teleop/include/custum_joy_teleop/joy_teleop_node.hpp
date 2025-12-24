@@ -13,6 +13,10 @@ public:
   JoyTeleopNode();
 
 private:
+  void initializeParameters();
+  void initializeSubscribers();
+  void initializePublishers();
+
   void joyCallback(const sensor_msgs::msg::Joy::SharedPtr msg);
   void processAxisInputs(const sensor_msgs::msg::Joy::SharedPtr msg);
   void processButtonInputs(const sensor_msgs::msg::Joy::SharedPtr msg);
@@ -20,7 +24,7 @@ private:
 
   rclcpp::Subscription<sensor_msgs::msg::Joy>::SharedPtr joy_sub_;
   rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_pub_;
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr string_pub_;
+  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr button_pub_;
 
   // Joystick axis indices (can be configured via parameters)
   int linear_axis_;
